@@ -17,6 +17,7 @@
         <servlet-name>CurrencyServlet</servlet-name>
         <url-pattern>/currencies</url-pattern>
         <url-pattern>/currency/*</url-pattern>
+
     </servlet-mapping>
 
 </web-app>

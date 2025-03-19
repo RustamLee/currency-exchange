@@ -61,5 +61,35 @@ public class CurrencyServlet extends HttpServlet {
         }
     }
 
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String path = req.getPathInfo();
+
+        if (path == null || path.equals("/")) {
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.getWriter().write("{\"error\": \"Currency code is required\"}");
+            return;
+        }
+
+        String currencyCode = path.substring(1).toUpperCase();
+
+        Currency currency = currencyDAO.getCurrencyByCode(currencyCode);
+        if (currency == null) {
+            resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            resp.getWriter().write("{\"error\": \"Currency not found\"}");
+            return;
+        }
+
+        boolean deleted = currencyDAO.deleteCurrencyByCode(currencyCode);
+        if (deleted) {
+            resp.setStatus(HttpServletResponse.SC_OK);
+            resp.getWriter().write("{\"message\": \"Currency deleted successfully\"}");
+        } else {
+            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            resp.getWriter().write("{\"error\": \"Failed to delete currency\"}");
+        }
+    }
+
+
 
 }

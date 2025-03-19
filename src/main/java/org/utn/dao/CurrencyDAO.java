@@ -26,7 +26,7 @@ public class CurrencyDAO {
                 ));
             }
         } catch (SQLException e) {
-            System.out.println("Error: "+e.getMessage());
+            System.out.println("Error: " + e.getMessage());
         }
         return currencies;
     }
@@ -68,6 +68,19 @@ public class CurrencyDAO {
             return affectedRows > 0;
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean deleteCurrencyByCode(String code) {
+        String sql = "DELETE FROM Currencies WHERE code = ?";
+        try (Connection conn = DriverManager.getConnection(URL);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, code);
+            int affectedRows = stmt.executeUpdate();
+            return affectedRows > 0;
+        } catch (SQLException e) {
+            System.out.println("Error: "+ e.getMessage());
             return false;
         }
     }
