@@ -85,5 +85,46 @@ public class CurrencyDAO {
         }
     }
 
+    public Integer getCurrencyIdByCode(String code) {
+        String sql = "SELECT id FROM Currencies WHERE code = ?";
+
+        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:database/currencies.db");
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, code);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Currency getCurrencyById(int id) {
+        String sql = "SELECT * FROM Currencies WHERE id = ?";
+
+        try (Connection conn = DriverManager.getConnection(URL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return new Currency(
+                        rs.getInt("id"),
+                        rs.getString("code"),
+                        rs.getString("full_name"),
+                        rs.getString("sign")
+                );
+            }
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        return null;
+    }
+
 
 }

@@ -5,19 +5,30 @@
              https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"
          version="5.0">
 
-    <!-- Пример сервлета -->
+    <!--  CurrencyServlet -->
     <servlet>
         <servlet-name>CurrencyServlet</servlet-name>
         <servlet-class>org.utn.controller.CurrencyServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
 
-    <!-- Маппинг сервлета -->
     <servlet-mapping>
         <servlet-name>CurrencyServlet</servlet-name>
         <url-pattern>/currencies</url-pattern>
         <url-pattern>/currency/*</url-pattern>
+    </servlet-mapping>
 
+    <!--  ExchangeRateServlet -->
+    <servlet>
+        <servlet-name>ExchangeRateServlet</servlet-name>
+        <servlet-class>org.utn.controller.ExchangeRateServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ExchangeRateServlet</servlet-name>
+        <url-pattern>/exchangeRates</url-pattern>
+        <url-pattern>/exchangeRate/*</url-pattern>
     </servlet-mapping>
 
 </web-app>
