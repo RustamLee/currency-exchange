@@ -18,7 +18,7 @@ public class CurrencyServlet extends HttpServlet {
 
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String path = req.getPathInfo();
 
         if (path == null || path.equals("/")) {
@@ -44,7 +44,7 @@ public class CurrencyServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Currency newCurrency = gson.fromJson(req.getReader(), Currency.class);
 
         boolean success = currencyDAO.addCurrency(newCurrency);
@@ -62,7 +62,7 @@ public class CurrencyServlet extends HttpServlet {
     }
 
     @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String path = req.getPathInfo();
 
         if (path == null || path.equals("/")) {

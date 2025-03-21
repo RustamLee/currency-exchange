@@ -5,59 +5,58 @@ import org.utn.dao.CurrencyDAO;
 import org.utn.dao.ExchangeRateDAO;
 import org.utn.model.Currency;
 import org.utn.model.ExchangeRate;
-import org.w3c.dom.ls.LSOutput;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class ExchangeRateServlet extends HttpServlet {
+
     private final ExchangeRateDAO exchangeRateDAO = new ExchangeRateDAO();
     private final Gson gson = new Gson();
 
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        System.out.println("Enter doGet ExchangeRateServlet");
+
         try {
             String path = req.getPathInfo();
-            if (path == null || path.equals("/exchangeRates")) {
-                List<ExchangeRate> exchangeRates = exchangeRateDAO.getAllExchangeRates();
-                List<Map<String, Object>> responseList = new ArrayList<>();
-
-                CurrencyDAO currencyDAO = new CurrencyDAO();
-
-                for (ExchangeRate exchangeRate : exchangeRates) {
-                    Map<String, Object> exchangeRateData = new LinkedHashMap<>();
-                    exchangeRateData.put("id", exchangeRate.getId());
-
-                    Currency baseCurrency = currencyDAO.getCurrencyById(exchangeRate.getBaseCurrencyId());
-                    if (baseCurrency != null) {
-                        exchangeRateData.put("baseCurrency", buildCurrencyMap(baseCurrency));
-                    }
-
-                    Currency targetCurrency = currencyDAO.getCurrencyById(exchangeRate.getTargetCurrencyId());
-                    if (targetCurrency != null) {
-                        exchangeRateData.put("targetCurrency", buildCurrencyMap(targetCurrency));
-                    }
-
-                    exchangeRateData.put("rate", exchangeRate.getRate());
-                    responseList.add(exchangeRateData);
-                }
-
-                resp.setContentType("application/json");
-                resp.setCharacterEncoding("UTF-8");
-                resp.getWriter().write(gson.toJson(responseList));
+            if (path == null || path.length() <= 1) {
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request path");
                 return;
             }
 
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().write("{\"error\": \"Invalid request path\"}");
+            String[] currencyCodes = path.substring(1).split("(?<=\\G.{3})");
+            if (currencyCodes.length != 2) {
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid currency pair format");
+                return;
+            }
+
+            String baseCode = currencyCodes[0];
+            String targetCode = currencyCodes[1];
+
+            ExchangeRate exchangeRate = exchangeRateDAO.getExchangeRateByCodes(baseCode, targetCode);
+
+            if (exchangeRate == null) {
+                resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Exchange rate not found for " + baseCode + targetCode);
+                return;
+            }
+
+            Map<String, Object> responseMap = buildExchangeRateMap(exchangeRate);
+
+            resp.setContentType("application/json");
+            resp.setCharacterEncoding("UTF-8");
+
+            resp.getWriter().write(gson.toJson(responseMap));
+
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            resp.getWriter().write("{\"error\": \"An unexpected error occurred\"}");
+            System.out.println("Error: " + e.getMessage());
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal server error");
         }
     }
 
@@ -70,5 +69,14 @@ public class ExchangeRateServlet extends HttpServlet {
         return currencyInfo;
     }
 
+    private Map<String, Object> buildExchangeRateMap(ExchangeRate exchangeRate) {
+        Map<String, Object> exchangeRateInfo = new LinkedHashMap<>();
+        exchangeRateInfo.put("id", exchangeRate.getId());
+        exchangeRateInfo.put("baseCurrency", buildCurrencyMap(exchangeRate.getBaseCurrency()));
 
+        exchangeRateInfo.put("targetCurrency", buildCurrencyMap(exchangeRate.getTargetCurrency()));
+        exchangeRateInfo.put("rate", exchangeRate.getRate());
+
+        return exchangeRateInfo;
+    }
 }

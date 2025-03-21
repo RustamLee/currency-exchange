@@ -18,7 +18,19 @@
         <url-pattern>/currency/*</url-pattern>
     </servlet-mapping>
 
-    <!--  ExchangeRateServlet -->
+    <!--  ExchangeRatesServlet -->
+    <servlet>
+        <servlet-name>ExchangeRatesServlet</servlet-name>
+        <servlet-class>org.utn.controller.ExchangeRatesServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ExchangeRatesServlet</servlet-name>
+        <url-pattern>/exchangeRates</url-pattern>
+    </servlet-mapping>
+
+    <!--  ExchangeRateServlet/* -->
     <servlet>
         <servlet-name>ExchangeRateServlet</servlet-name>
         <servlet-class>org.utn.controller.ExchangeRateServlet</servlet-class>
@@ -27,7 +39,6 @@
 
     <servlet-mapping>
         <servlet-name>ExchangeRateServlet</servlet-name>
-        <url-pattern>/exchangeRates</url-pattern>
         <url-pattern>/exchangeRate/*</url-pattern>
     </servlet-mapping>
 
