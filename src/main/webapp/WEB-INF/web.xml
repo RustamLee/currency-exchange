@@ -42,4 +42,16 @@
         <url-pattern>/exchangeRate/*</url-pattern>
     </servlet-mapping>
 
+    <!--  PathExchangeRateServlet -->
+    <servlet>
+        <servlet-name>PatchExchangeRateServlet</servlet-name>
+        <servlet-class>org.utn.controller.PatchExchangeRateServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>PatchExchangeRateServlet</servlet-name>
+        <url-pattern>/patchExchangeRate/*</url-pattern>
+    </servlet-mapping>
+
 </web-app>

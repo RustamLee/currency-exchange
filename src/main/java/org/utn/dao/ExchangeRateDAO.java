@@ -132,6 +132,36 @@ public class ExchangeRateDAO {
         return null;
     }
 
+    public boolean updateExchangeRate(String baseCurrencyCode, String targetCurrencyCode, BigDecimal rate) {
+        Currency baseCurrency = currencyDAO.getCurrencyByCode(baseCurrencyCode);
+        Currency targetCurrency = currencyDAO.getCurrencyByCode(targetCurrencyCode);
+        try {
+            if (baseCurrency == null || targetCurrency == null) {
+                return false;
+            }
+
+        } catch (Exception e){
+            System.out.println("Error: " + e.getMessage());
+        }
+        String sql = "UPDATE ExchangeRates SET rate = ? WHERE base_currency_id = ? AND target_currency_id = ?";
+
+        try (Connection conn = DriverManager.getConnection(URL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setBigDecimal(1, rate);
+            pstmt.setInt(2, baseCurrency.getId());
+            pstmt.setInt(3, targetCurrency.getId());
+
+            int rowsUpdated = pstmt.executeUpdate();
+            return rowsUpdated > 0;
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+        return false;
+    }
+
 
 }
 
