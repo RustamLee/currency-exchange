@@ -54,4 +54,16 @@
         <url-pattern>/patchExchangeRate/*</url-pattern>
     </servlet-mapping>
 
+    <!--  TradeExchangeRateServlet -->
+    <servlet>
+        <servlet-name>TradeExchangeRateServlet</servlet-name>
+        <servlet-class>org.utn.controller.TradeExchangeRateServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>TradeExchangeRateServlet</servlet-name>
+        <url-pattern>/tradeExchangeRate/*</url-pattern>
+    </servlet-mapping>
+
 </web-app>

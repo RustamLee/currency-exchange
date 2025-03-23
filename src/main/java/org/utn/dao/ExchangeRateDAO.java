@@ -4,6 +4,7 @@ import org.utn.model.Currency;
 import org.utn.model.ExchangeRate;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URL;
 import java.sql.*;
 import java.util.ArrayList;
@@ -160,6 +161,27 @@ public class ExchangeRateDAO {
         }
 
         return false;
+    }
+
+    public BigDecimal getExchangeRateWithFallback(String fromCode, String toCode) {
+        ExchangeRate directRate = getExchangeRateByCodes(fromCode, toCode);
+        if (directRate != null) {
+            return directRate.getRate();
+        }
+
+        ExchangeRate reverseRate = getExchangeRateByCodes(toCode, fromCode);
+        if (reverseRate != null) {
+            return BigDecimal.ONE.divide(reverseRate.getRate(), 6, RoundingMode.HALF_UP);
+        }
+
+        ExchangeRate fromUsd = getExchangeRateByCodes("USD", fromCode);
+        ExchangeRate toUsd = getExchangeRateByCodes("USD", toCode);
+
+        if (fromUsd != null && toUsd != null) {
+            return toUsd.getRate().divide(fromUsd.getRate(), 6, RoundingMode.HALF_UP);
+        }
+
+        return null;
     }
 
 
