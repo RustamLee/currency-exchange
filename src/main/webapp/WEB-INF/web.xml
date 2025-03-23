@@ -30,7 +30,7 @@
         <url-pattern>/exchangeRates</url-pattern>
     </servlet-mapping>
 
-    <!--  ExchangeRateServlet/* -->
+    <!-- create ExchangeRateServlet/* -->
     <servlet>
         <servlet-name>ExchangeRateServlet</servlet-name>
         <servlet-class>org.utn.controller.ExchangeRateServlet</servlet-class>

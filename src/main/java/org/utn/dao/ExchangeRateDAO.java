@@ -164,26 +164,25 @@ public class ExchangeRateDAO {
     }
 
     public BigDecimal getExchangeRateWithFallback(String fromCode, String toCode) {
+        // case 1: Try to get the direct exchange rate (fromCode -> toCode)
         ExchangeRate directRate = getExchangeRateByCodes(fromCode, toCode);
         if (directRate != null) {
             return directRate.getRate();
         }
-
+        // case 2: If direct rate is not found, try the reverse exchange rate (toCode -> fromCode)
         ExchangeRate reverseRate = getExchangeRateByCodes(toCode, fromCode);
         if (reverseRate != null) {
             return BigDecimal.ONE.divide(reverseRate.getRate(), 6, RoundingMode.HALF_UP);
         }
-
+        // case 3: If neither direct nor reverse rates are found, try to find rates via USD as an intermediary
         ExchangeRate fromUsd = getExchangeRateByCodes("USD", fromCode);
         ExchangeRate toUsd = getExchangeRateByCodes("USD", toCode);
 
         if (fromUsd != null && toUsd != null) {
             return toUsd.getRate().divide(fromUsd.getRate(), 6, RoundingMode.HALF_UP);
         }
-
         return null;
     }
-
 
 }
 
