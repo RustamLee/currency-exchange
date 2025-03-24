@@ -54,15 +54,15 @@ public class CurrencyDAO {
         return null;
     }
 
-    public boolean addCurrency(Currency currency) {
+    public boolean addCurrency(String name, String code, String sign) {
         String sql = "INSERT INTO Currencies (code, full_name, sign) VALUES (?, ?, ?)";
 
         try (Connection conn = DriverManager.getConnection(URL);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setString(1, currency.getCode());
-            pstmt.setString(2, currency.getFullName());
-            pstmt.setString(3, currency.getSign());
+            pstmt.setString(1, code);
+            pstmt.setString(2, name);
+            pstmt.setString(3, sign);
 
             int affectedRows = pstmt.executeUpdate();
             return affectedRows > 0;
@@ -71,6 +71,7 @@ public class CurrencyDAO {
             return false;
         }
     }
+
 
     public boolean deleteCurrencyByCode(String code) {
         String sql = "DELETE FROM Currencies WHERE code = ?";

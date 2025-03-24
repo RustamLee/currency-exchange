@@ -3,19 +3,19 @@ package org.utn.model;
 public class Currency {
     private int id;
     private String code;
-    private String fullName;
+    private String name;
     private String sign;
 
-    public Currency(int id, String code, String fullName, String sign){
+    public Currency(int id, String code, String name, String sign){
         this.id = id;
         this.code = code;
-        this.fullName = fullName;
+        this.name = name;
         this.sign = sign;
     }
 
     public int getId() { return id; }
     public String getCode() { return code; }
-    public String getFullName() { return fullName; }
+    public String getName() { return name; }
     public String getSign() { return sign; }
 
 }

@@ -62,7 +62,7 @@ public class TradeExchangeRateServlet extends HttpServlet  {
     private Map<String, Object> buildCurrencyInfo(Currency currency) {
         Map<String, Object> currencyInfo = new LinkedHashMap<>();
         currencyInfo.put("id", currency.getId());
-        currencyInfo.put("name", currency.getFullName());
+        currencyInfo.put("name", currency.getName());
         currencyInfo.put("code", currency.getCode());
         currencyInfo.put("sign", currency.getSign());
         return currencyInfo;

@@ -5,6 +5,41 @@
              https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"
          version="5.0">
 
+
+    <!-- Static files configuration (DefaultServlet) -->
+    <servlet>
+        <servlet-name>DefaultServlet</servlet-name>
+        <servlet-class>org.apache.catalina.servlets.DefaultServlet</servlet-class>
+        <init-param>
+            <param-name>debug</param-name>
+            <param-value>0</param-value>
+        </init-param>
+        <init-param>
+            <param-name>readonly</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <init-param>
+            <param-name>listings</param-name>
+            <param-value>false</param-value>
+        </init-param>
+        <!-- Serve static files from /webapp directory -->
+        <init-param>
+            <param-name>docBase</param-name>
+            <param-value>/WEB-INF/classes/webapp</param-value> <!-- Путь для static контента, он теперь внутри webapp -->
+        </init-param>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>DefaultServlet</servlet-name>
+        <url-pattern>/</url-pattern> <!-- Все запросы идут сюда, включая статические файлы -->
+    </servlet-mapping>
+
+    <!-- Welcome page configuration -->
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file> <!-- Указываем, что index.html будет главной страницей -->
+    </welcome-file-list>
+
+
     <!--  CurrencyServlet -->
     <servlet>
         <servlet-name>CurrencyServlet</servlet-name>
@@ -14,11 +49,10 @@
 
     <servlet-mapping>
         <servlet-name>CurrencyServlet</servlet-name>
-        <url-pattern>/currencies</url-pattern>
-        <url-pattern>/currency/*</url-pattern>
+        <url-pattern>/currencies</url-pattern> <!-- to get all currencies / create a new currency -->
+        <url-pattern>/currency/*</url-pattern> <!-- to get some currency -->
     </servlet-mapping>
 
-    <!--  ExchangeRatesServlet -->
     <servlet>
         <servlet-name>ExchangeRatesServlet</servlet-name>
         <servlet-class>org.utn.controller.ExchangeRatesServlet</servlet-class>
@@ -27,20 +61,23 @@
 
     <servlet-mapping>
         <servlet-name>ExchangeRatesServlet</servlet-name>
-        <url-pattern>/exchangeRates</url-pattern>
+        <url-pattern>/exchangeRates</url-pattern> <!-- get all exchange rates -->
+        <url-pattern>/exchangeRates/*</url-pattern> <!-- add a new exchange rate -->
     </servlet-mapping>
 
-    <!-- create ExchangeRateServlet/* -->
-    <servlet>
-        <servlet-name>ExchangeRateServlet</servlet-name>
-        <servlet-class>org.utn.controller.ExchangeRateServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
 
-    <servlet-mapping>
-        <servlet-name>ExchangeRateServlet</servlet-name>
-        <url-pattern>/exchangeRate/*</url-pattern>
-    </servlet-mapping>
+    <!--  get some Exchange Rate  -->
+<!--    <servlet>-->
+<!--        <servlet-name>ExchangeRateServlet</servlet-name>-->
+<!--        <servlet-class>org.utn.controller.ExchangeRateServlet</servlet-class>-->
+<!--        <load-on-startup>1</load-on-startup>-->
+<!--    </servlet>-->
+
+<!--    <servlet-mapping>-->
+<!--        <servlet-name>ExchangeRateServlet</servlet-name>-->
+<!--        <url-pattern>/exchangeRate/*</url-pattern>-->
+<!--    </servlet-mapping>-->
+
 
     <!--  PathExchangeRateServlet -->
     <servlet>
@@ -50,8 +87,8 @@
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>PatchExchangeRateServlet</servlet-name>
-        <url-pattern>/patchExchangeRate/*</url-pattern>
+        <servlet-name>PatchExchangeRateServlet</servlet-name> <!-- update exchange rate -->
+        <url-pattern>/exchangeRate/*</url-pattern>
     </servlet-mapping>
 
     <!--  TradeExchangeRateServlet -->
@@ -63,7 +100,7 @@
 
     <servlet-mapping>
         <servlet-name>TradeExchangeRateServlet</servlet-name>
-        <url-pattern>/tradeExchangeRate/*</url-pattern>
+        <url-pattern>/exchange</url-pattern><!-- trade exchange rate -->
     </servlet-mapping>
 
 </web-app>
