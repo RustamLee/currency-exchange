@@ -33,8 +33,8 @@
 
     </dependencies>
     <build>
+        <finalName>currency-exchange-api</finalName>
         <plugins>
-
             <!-- Maven plugin to run the app on Tomcat -->
             <plugin>
                 <groupId>org.apache.tomcat.maven</groupId>
